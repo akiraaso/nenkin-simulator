@@ -73,9 +73,12 @@
   --main-bg-color: #f0f0f0;
   --font-black: #2c2c2c;
   --shadow-color: rgba(60, 63, 66, 0.32);
-  --base-margin: 6rem;
+  --base-margin: 5vw;
 
-  padding: 0 max(calc((100vw - 1700px) / 2), 0px);
+  /* 0px is converted to 0, it silently causes an error, hence using 0.01px */
+  /* https://stackoverflow.com/questions/62520998/why-doesnt-min-or-max-work-with-unitless-0 */
+  padding: 0 max(calc((100vw - 1700px) / 2), 0.01px);
+
   display: grid;
   height: 100vh;
   grid-template-rows: 1fr auto;
@@ -118,7 +121,6 @@ h1 {
 
 * {
   box-sizing: border-box;
-  color: var(--font-black);
   font-family: sans-serif;
 }
 
@@ -130,7 +132,7 @@ h1 {
   align-items: flex-start;
   justify-content: right;
   font-size: 0.8rem;
-  height: var(--base-margin);
+  height: max(var(--base-margin), 2rem);
   padding: 1rem calc(var(--base-margin) + 1rem) 0 0;
 }
 
@@ -151,10 +153,11 @@ h1 {
 
 #sidebar {
   grid-area: sidebar;
+  color: var(--font-black);
   width: 18rem;
   height: 100vh;
   padding: var(--base-margin) 0;
-  margin: 0 var(--base-margin);
+  margin: 0 2vw 0 var(--base-margin);
   display: grid;
   grid-template-areas: "variables-pane" "chart-list";
   grid-template-rows: auto minmax(0, 1fr);
@@ -229,11 +232,48 @@ h1 {
 #chartWrapper {
   width: calc(100% - 2rem);
   margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
 
 #chart {
-  width: 100%;
+  width: min(100%, 1000px);
   overflow: visible;
+}
+
+@media all and (max-width: 1024px) {
+  #container {
+    height: auto;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-columns: auto;
+    grid-template-areas:
+      "banner"
+      "chartPanel"
+      "sidebar"
+    ;
+  }
+
+  #banner {
+    font-size: 0.7rem;
+    align-items: flex-end;
+    padding: 0 calc(3vw + 1rem) 1.5vw 0;
+  }
+
+  #sidebar {
+    height: 70vh;
+  }
+
+  #variables-pane {
+    font-size: 0.8rem;
+  }
+
+  #chartPanel {
+    margin: 0 3vw 0 3vw;
+  }
+
+  .chart-list-item {
+    font-size: 0.7rem;
+  }
 }
 </style>
 
@@ -693,12 +733,14 @@ export default Vue.extend({
       const datum = valuedChartDatum.map((d) => d.data.slice(minYear, maxYear));
 
       // Graph style settings
-      const height = 380;
+      const height = 500;
       const width = 720;
-      const margin = {top: 30, right: 10, bottom: 45, left: 60};
+      const margin = {top: 40, right: 10, bottom: 45, left: 60};
       const innerWidth = width - margin.left - margin.right;
       const axisColor = '#2c2c2c';
+      const axisFontSize = '10px';
       const labelColor = '#2c2c2c';
+      const labelFontSize = '10px';
 
       // Create the graph
       svg.attr('viewBox', `0 0 ${width} ${height}`);
@@ -722,7 +764,7 @@ export default Vue.extend({
           .attr('stroke', axisColor);
         g.selectAll('text')
           .attr('fill', axisColor)
-          .attr('font-size', '8px')
+          .attr('font-size', axisFontSize)
           .attr('preserveAspectRatio', 'xMinYMin');
       }
       const yAxis = (g: d3.Selection<SVGGElement, unknown, any, any>) => {
@@ -736,7 +778,7 @@ export default Vue.extend({
           .attr('stroke', axisColor);
         g.selectAll('text')
           .attr('fill', axisColor)
-          .attr('font-size', '8px');
+          .attr('font-size', axisFontSize);
       }
       const yAxisGrid = (g: d3.Selection<SVGGElement, unknown, any, any>) => {
         g.attr('transform', `translate(${margin.left},0)`)
@@ -763,7 +805,7 @@ export default Vue.extend({
         .attr('x', width - margin.right)
         .attr('y', height - margin.bottom + 35)
         .attr('fill', labelColor)
-        .attr('font-size', '8px')
+        .attr('font-size', labelFontSize)
         .attr('font-family', 'sans-serif')
         .attr('font-weight', 'normal');
 
@@ -774,7 +816,7 @@ export default Vue.extend({
         .attr('x', margin.left)
         .attr('y', margin.top - 10)
         .attr('fill', labelColor)
-        .attr('font-size', '8px')
+        .attr('font-size', labelFontSize)
         .attr('font-family', 'sans-serif')
         .attr('font-weight', 'normal');
 
