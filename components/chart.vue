@@ -42,15 +42,15 @@
           </div>
         </div>
         <ul id="chart-list">
-          <li class=chart-list-item v-for="chartData in chartDatum.filter((d) => d.type === 'employeesPension')" :key="chartData">
+          <li class=chart-list-item v-for="chartData in chartDatum.filter((d) => d.type === 'employeesPension')" :key="chartData.name">
             <span class="chart-list-label" :style="{ backgroundColor: chartData.color }"></span>
             <span>厚生年金(等級{{chartData.grade}})</span>
           </li>
-          <li class=chart-list-item v-for="chartData in chartDatum.filter((d) => d.type === 'nationalPension')" :key="chartData">
+          <li class=chart-list-item v-for="chartData in chartDatum.filter((d) => d.type === 'nationalPension')" :key="chartData.name">
             <span class="chart-list-label" :style="{ backgroundColor: chartData.color }"></span>
             <span>国民年金({{nationalOptionNames.filter((d) => d.value === chartData.option)[0].name}})</span>
           </li>
-          <li class=chart-list-item v-for="chartData in chartDatum.filter((d) => d.type === 'noPension')" :key="chartData">
+          <li class=chart-list-item v-for="chartData in chartDatum.filter((d) => d.type === 'noPension')" :key="chartData.name">
             <span class="chart-list-label" :style="{ backgroundColor: chartData.color }"></span>
             <span>年金なし</span>
           </li>
