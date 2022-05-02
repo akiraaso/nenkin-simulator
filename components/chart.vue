@@ -674,15 +674,12 @@ export default Vue.extend({
   },
   watch: {
     apy(after, before) {
-      console.log(`apy: ${after} ${before}`);
       this.applyToCharts({apy: after});
     },
     monthlyPayment(after, before) {
-      console.log(`monthlyPayment: ${after} ${before}`);
       this.applyToCharts({monthlyPayment: after});
     },
     yearReceiptBegins(after, before) {
-      console.log(`yearReceiptBegins: ${after} ${before}`);
       this.applyToCharts({yearReceiptBegins: after});
     },
   },
