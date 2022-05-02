@@ -57,7 +57,7 @@
         </ul>
       </aside>
       <div id="chartPanel" ref="chartPanel" >
-        <div id="chartWrapper">
+        <div id="chartWrapper" ref="chartWrapper" data-loading="true">
           <svg id="chart" ref="chart"></svg>
         </div>
       </div>
@@ -241,6 +241,20 @@ h1 {
 #chart {
   width: min(100%, 1000px);
   overflow: visible;
+}
+
+[data-loading] {
+  transition: all 500ms;
+}
+
+[data-loading='true'] {
+  filter: blur(12px);
+  opacity: 0.8;
+}
+
+[data-loading='false'] {
+  filter: none;
+  opacity: 1;
 }
 
 @media all and (max-width: 1200px) {
@@ -1014,6 +1028,13 @@ export default Vue.extend({
       }
       this.updateChartColors();
       this.renderChart();
+
+      setTimeout(() => {
+        const chartElement = this.$refs.chartWrapper;
+        if (chartElement instanceof HTMLElement) {
+          chartElement.dataset.loading = "false";
+        }
+      }, 500);
   },
 })
 </script>
