@@ -73,7 +73,8 @@
   --main-bg-color: #f0f0f0;
   --font-black: #2c2c2c;
   --shadow-color: rgba(60, 63, 66, 0.32);
-  --base-margin: 5vw;
+  --vertical-margin: 5vw;
+  --horizontal-margin: 7vw;
 
   /* 0px is converted to 0, it silently causes an error, hence using 0.01px */
   /* https://stackoverflow.com/questions/62520998/why-doesnt-min-or-max-work-with-unitless-0 */
@@ -132,8 +133,8 @@ h1 {
   align-items: flex-start;
   justify-content: right;
   font-size: 0.8rem;
-  height: max(var(--base-margin), 2rem);
-  padding: 1rem calc(var(--base-margin) + 1rem) 0 0;
+  height: max(var(--vertical-margin), 2rem);
+  padding: 1rem calc(var(--horizontal-margin) + 1rem) 0 0;
 }
 
 #github-link {
@@ -156,8 +157,8 @@ h1 {
   color: var(--font-black);
   width: 18rem;
   height: 100vh;
-  padding: var(--base-margin) 0;
-  margin: 0 2vw 0 var(--base-margin);
+  padding: var(--vertical-margin) 0;
+  margin: 0 2vw 0 var(--horizontal-margin);
   display: grid;
   grid-template-areas: "variables-pane" "chart-list";
   grid-template-rows: auto minmax(0, 1fr);
@@ -168,7 +169,7 @@ h1 {
 #variables-pane {
   grid-area: variables-pane;
   font-size: 0.9rem;
-  margin: 0.25rem 0 calc(var(--base-margin) / 2);
+  margin: 0.25rem 0 calc(var(--vertical-margin) / 2);
   border-radius: 1rem;
   box-shadow: var(--convex-shadow);
 }
@@ -226,7 +227,8 @@ h1 {
   box-shadow: 2px 2px 10px var(--shadow-color);
   background-color: white;
   display: flex;
-  margin: var(--base-margin) var(--base-margin) 0 0;
+  margin: var(--vertical-margin) var(--horizontal-margin) 0 0;
+  max-height: 92vh;
 }
 
 #chartWrapper {
@@ -241,7 +243,7 @@ h1 {
   overflow: visible;
 }
 
-@media all and (max-width: 1024px) {
+@media all and (max-width: 1200px) {
   #container {
     height: auto;
     grid-template-rows: auto auto minmax(0, 1fr);
@@ -730,14 +732,22 @@ export default Vue.extend({
       const datum = valuedChartDatum.map((d) => d.data.slice(minYear, maxYear));
 
       // Graph style settings
-      const height = 500;
+      const height = 490;
       const width = 720;
-      const margin = {top: 40, right: 10, bottom: 45, left: 60};
+      const margin = {top: 40, right: 10, bottom: 55, left: 60};
       const innerWidth = width - margin.left - margin.right;
       const axisColor = '#2c2c2c';
-      const axisFontSize = '10px';
       const labelColor = '#2c2c2c';
-      const labelFontSize = '10px';
+      let axisFontSize = '10px';
+      let labelFontSize = '10px';
+      if (window.innerWidth < 768) {
+        axisFontSize = '16px';
+        labelFontSize = '16px';
+      }
+      else if (window.innerWidth <= 900) {
+        axisFontSize = '12px';
+        labelFontSize = '12px';
+      }
 
       // Create the graph
       svg.attr('viewBox', `0 0 ${width} ${height}`);
@@ -800,7 +810,7 @@ export default Vue.extend({
         .text('(20歳から経過した年)')
         .attr('text-anchor', 'end')
         .attr('x', width - margin.right)
-        .attr('y', height - margin.bottom + 35)
+        .attr('y', height - margin.bottom + 40)
         .attr('fill', labelColor)
         .attr('font-size', labelFontSize)
         .attr('font-family', 'sans-serif')
