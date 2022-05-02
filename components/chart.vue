@@ -256,13 +256,15 @@ h1 {
   }
 
   #banner {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     align-items: flex-end;
-    padding: 0 calc(3vw + 1rem) 1.5vw 0;
+    padding: 5vh calc(3vw + 1rem) 6px 0;
   }
 
   #sidebar {
     height: 70vh;
+    padding-top: 0;
+    margin: 4vh 2vw 0 5vw;
   }
 
   #variables-pane {
